@@ -13,7 +13,7 @@ public class ClaseInicial {
 	
 	
 	
-	public enum Densidad {d25(25-13),d50(50-13),d75(75-13);
+	public enum Densidad {d0(0),d5(5),d10(10),d25(25-13),d50(50-13),d75(75-13);
 		
 		public int valores;
 		
@@ -43,16 +43,25 @@ public class ClaseInicial {
 				Integer den=Integer.parseInt(args[0]);
 				switch (den) {
 				case 0:
-					densidad=Densidad.d25;
+					densidad=Densidad.d0;
 					break;
 				case 1:
-					densidad=Densidad.d50;
+					densidad=Densidad.d5;
 					break;
 				case 2:
+					densidad=Densidad.d10;
+					break;
+				case 3:
+					densidad=Densidad.d25;
+					break;
+				case 4:
+					densidad=Densidad.d50;
+					break;
+				case 5:
 					densidad=Densidad.d75;
 					break;
 				default:
-					densidad=Densidad.d50;
+					densidad=Densidad.d0;
 					break;
 				}
 			} catch (Exception e) {
@@ -111,13 +120,18 @@ public class ClaseInicial {
 		
 		switch (densidad) {
 		case d25:
-			BuscadoSup=densidad.getValores()+Valor;
-			break;
 		case d50:
-			BuscadoSup=densidad.getValores()+Valor;
-			break;
 		case d75:
 			BuscadoSup=densidad.getValores()+Valor;
+			break;
+		case d0:
+			BuscadoSup=c.nextInt(5)+1;
+			break;
+		case d5:
+			BuscadoSup=c.nextInt(5)+5;
+			break;
+		case d10:
+			BuscadoSup=c.nextInt(5)+10;
 			break;
 		default:
 			BuscadoSup=densidad.getValores()+Valor;
@@ -126,11 +140,10 @@ public class ClaseInicial {
 		
 		
 		
-		
+		LinkedList<Par> Unos=new LinkedList<Par>(); 
+		LinkedList<Par> Ceros=new LinkedList<Par>();
 		for (int i = 0; i < array.length; i++) {
 			byte[] dento = array[i];
-			LinkedList<Par> Unos=new LinkedList<Par>(); 
-			LinkedList<Par> Ceros=new LinkedList<Par>();
 			
 			if (debugD)
 				System.out.println("D:"+i);
@@ -166,11 +179,31 @@ public class ClaseInicial {
 					}
 					porcentaje=((float)Unos.size()/((float)(Unos.size()+Ceros.size())))*100;
 				}
+				Unos=new LinkedList<Par>(); 
+				Ceros=new LinkedList<Par>();
 			}
 		}
 		
 		
-		
+		float porcentaje=((float)Unos.size()/((float)(Unos.size()+Ceros.size())))*100;
+		while (porcentaje<BuscadoSup-1||porcentaje>BuscadoSup+1)
+		{
+			if (debugP)
+				System.out.println("P:"+porcentaje);
+			if (porcentaje<BuscadoSup-1)
+			{
+				Par valorPar =Ceros.remove(c.nextInt(Ceros.size()));
+				array[valorPar.i][valorPar.j]=1;
+				Unos.add(valorPar);
+			}
+			else
+			{
+				Par valorPar =Unos.remove(c.nextInt(Unos.size()));
+				array[valorPar.i][valorPar.j]=0;
+				Ceros.add(valorPar);
+			}
+			porcentaje=((float)Unos.size()/((float)(Unos.size()+Ceros.size())))*100;
+		}
 		
 		
 		
